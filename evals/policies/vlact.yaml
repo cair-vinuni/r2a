@@ -1,0 +1,16 @@
+id: vlact
+conda_env: robotwin
+python: external/VLAct/.venv/bin/python
+protocol: vlact_robotwin
+ckpt_key: vlact_ckpt
+server:
+  script: evals/vlact/ws_server.py
+  args: ["--checkpoint", "{checkpoint}", "--port", "{port}"]
+# One server per GPU. The 4B backbone infers one item at a time and a chunk covers 32 steps, so a
+# handful of clients keep it busy while they plan and step the simulator.
+placement:
+  servers_per_gpu: 1
+  clients_per_server: 4
+pythonpath:
+  - external/VLAct
+  - evals/libero_plus/harness

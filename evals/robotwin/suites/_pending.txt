@@ -1,0 +1,6 @@
+pick_diverse_bottles
+place_can_basket
+place_cans_plasticbox
+put_bottles_dustbin
+put_object_cabinet
+scan_object

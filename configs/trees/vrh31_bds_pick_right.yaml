@@ -1,0 +1,16 @@
+policy: gr00t_vrh31
+task_suite: vrh31_bds_pick
+arm: right
+ee_from_obs: true
+pose_space: euclidean
+build:
+  graph:
+    coarsen: 6
+  segments:
+    segment_len: 33
+data:
+  hdf5: vrh31/hdf5/vrh31_bds_pick_right
+  fwm: fwm/vrh31_bds_pick_right
+artifacts: vrh31_bds_pick_right/artifacts
+eval:
+  gr00t_vrh31_ckpt: gr00t/hf_weights/vrh31_bds_pick_local

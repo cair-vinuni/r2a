@@ -1,0 +1,11 @@
+policy: stablevla
+task_suite: libero_object
+data:
+  hdf5: libero_hdf5/libero_object
+  fwm: fwm
+artifacts: object/artifacts
+eval:
+  stablevla_ckpt: stablevla/hf_weights/object
+  gr00t_ckpt: gr00t/hf_weights/libero_object
+  pi05_ckpt: pi05/openpi-assets/checkpoints/pi05_libero
+  light_filter: evals/libero_plus/suite_filters/libero_object_Light_Conditions.txt

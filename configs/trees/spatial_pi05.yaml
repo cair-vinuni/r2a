@@ -1,0 +1,9 @@
+policy: pi05
+task_suite: libero_spatial
+data:
+  hdf5: libero_hdf5/libero_spatial
+  fwm: fwm/spatial_pi05
+artifacts: spatial_pi05/artifacts
+eval:
+  pi05_ckpt: pi05/openpi-assets/checkpoints/pi05_libero
+  light_filter: evals/libero_plus/suite_filters/libero_spatial_Light_Conditions.txt

@@ -1,0 +1,14 @@
+id: stablevla
+conda_env: stablevla
+protocol: openvla_oft
+ckpt_key: stablevla_ckpt
+server:
+  script: evals/stablevla/stablevla_policy_server.py
+  args: ["--ckpt_path", "{checkpoint}", "--port", "{port}", "--cuda", "0", "--workers", "2"]
+# The action pipeline serves one item at a time, so the lever is 4 GB servers per GPU.
+placement:
+  servers_per_gpu: 4
+  clients_per_server: 2
+pythonpath:
+  - stablevla
+  - evals/libero_plus/harness

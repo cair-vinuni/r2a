@@ -1,0 +1,4 @@
+# Three quick tasks for a smoke run of the harness.
+place_empty_cup
+stack_blocks_two
+handover_block

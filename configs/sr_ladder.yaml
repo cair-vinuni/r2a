@@ -1,0 +1,119 @@
+paths:
+  score_py: evals/libero_plus/score.py
+  suites_yaml: configs/robot_ood.yaml
+defaults:
+  num_clients: 0   # 0: the policy's placement (evals/policies/<id>.yaml) times the GPUs the cell gets
+  base_port: 14090
+  server_ready_timeout_s: 1200
+preflight:
+  min_free_gib: 12.0
+  max_loadavg_factor: 4.0
+  large_rung_episodes: 200
+expected_episodes:
+  object:
+    Background_Textures: 248
+    Camera_Viewpoints: 396
+    Language_Instructions: 354
+    Light_Conditions: 296
+    Objects_Layout: 403
+    Robot_Initial_States: 398
+    Sensor_Noise: 422
+  spatial:
+    Background_Textures: 258
+    Camera_Viewpoints: 376
+    Language_Instructions: 390
+    Light_Conditions: 291
+    Objects_Layout: 385
+    Robot_Initial_States: 350
+    Sensor_Noise: 351
+  goal:
+    Background_Textures: 281
+    Camera_Viewpoints: 408
+    Language_Instructions: 410
+    Light_Conditions: 278
+    Objects_Layout: 425
+    Robot_Initial_States: 409
+    Sensor_Noise: 379
+  long:
+    Background_Textures: 289
+    Camera_Viewpoints: 419
+    Language_Instructions: 383
+    Light_Conditions: 273
+    Objects_Layout: 312
+    Robot_Initial_States: 393
+    Sensor_Noise: 449
+axis_default_mode:
+  default: base
+rungs:
+  R1:
+    label: R1 smoke
+    description: does the harness run end to end on object/Robot-Init, long/Robot-Init
+      and long/Sensor-Noise, each on a small instance-filtered pool
+    cells:
+    - suite: object
+      axis: Robot_Initial_States
+      mode: base
+      variant: smoke
+      filter: evals/libero_plus/suite_filters/smoke_object_robotinit20.txt
+      expected_n: 11
+      num_clients: 4
+      gate:
+        kind: min_successes
+        min_successes: 8
+    - suite: long
+      axis: Robot_Initial_States
+      mode: base
+      variant: smoke
+      filter: evals/libero_plus/suite_filters/smoke_long_robotinit12.txt
+      expected_n: 12
+      num_clients: 4
+    - suite: long
+      axis: Sensor_Noise
+      mode: base
+      variant: smoke
+      filter: evals/libero_plus/suite_filters/smoke_long_sensornoise12.txt
+      expected_n: 12
+      num_clients: 4
+    - suite: long
+      axis: Objects_Layout
+      mode: base
+      variant: smoke
+      filter: evals/libero_plus/suite_filters/smoke_long_objectslayout12.txt
+      expected_n: 12
+      num_clients: 4
+  L4:
+    label: L4 long, four reported axes
+    description: long x Robot_Initial_States, Camera_Viewpoints, Language_Instructions,
+      Objects_Layout -- 1507 episodes, the four axes docs/results.md reports
+    auto_generate: grid
+    suites:
+    - long
+    axes:
+    - Robot_Initial_States
+    - Camera_Viewpoints
+    - Language_Instructions
+    - Objects_Layout
+  L3:
+    label: L3 long, remaining three axes
+    description: long x Sensor_Noise, Background_Textures, Light_Conditions -- 1011
+      episodes, the axes L4 leaves out
+    auto_generate: grid
+    suites:
+    - long
+    axes:
+    - Sensor_Noise
+    - Background_Textures
+    - Light_Conditions
+  R4:
+    label: R4 full grid
+    description: all 4 suites x 7 axes, 10026 episodes
+    auto_generate: grid
+  G3:
+    label: G3 three suites, seven axes
+    description: object/spatial/goal x 7 axes -- 7508 episodes, the full grid without
+      long, for a policy reported on three suites
+    auto_generate: grid
+    suites:
+    - object
+    - spatial
+    - goal

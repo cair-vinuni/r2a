@@ -1,0 +1,16 @@
+diff --git a/envs/_base_task.py b/envs/_base_task.py
+index f8d1eab..8b92780 100644
+--- a/envs/_base_task.py
++++ b/envs/_base_task.py
+@@ -79,7 +79,10 @@ class Base_Task(gym.Env):
+                 self.current_noise_type = noise_types[idx]
+             # self.current_noise_type = np.random.choice(noise_types)
+             # self.current_noise_type = 'glass'
+-            self.current_severity   = np.random.randint(2, 3)          # L1..L5
++            # Severity is uniform over {2, 3} per episode, drawn off a private stream so the
++            # scene's own draws -- and the seeds cached against them -- stay where they were.
++            severity_rng = np.random.RandomState(kwags.get("seed", 0) * 5 + self.ep_num)
++            self.current_severity   = int(severity_rng.randint(2, 4))   # L1..L5
+             self.current_s  = (self.current_severity - 1) / 4.0
+ 
+             if self.current_noise_type == 'zoom':

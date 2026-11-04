@@ -1,0 +1,9 @@
+policy: gr00t
+task_suite: libero_spatial
+data:
+  hdf5: libero_hdf5/libero_spatial
+  fwm: fwm/spatial_gr00t
+artifacts: spatial_gr00t/artifacts
+eval:
+  gr00t_ckpt: gr00t/hf_weights/libero_spatial
+  light_filter: evals/libero_plus/suite_filters/libero_spatial_Light_Conditions.txt

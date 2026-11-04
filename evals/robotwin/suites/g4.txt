@@ -1,0 +1,11 @@
+# RoboTwin 2.0 tasks 31-40 of the fifty, alphabetical.
+place_fan
+place_mouse_pad
+place_object_basket
+place_object_scale
+place_object_stand
+place_phone_stand
+place_shoe
+press_stapler
+put_bottles_dustbin
+put_object_cabinet

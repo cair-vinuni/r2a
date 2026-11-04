@@ -1,0 +1,68 @@
+# evals/libero_plus/bench.yaml — the LIBERO-Plus benchmark, as robot_ood.eval.bench reads it.
+#
+# The seven axes are perturbation categories of one task suite: the client picks an axis at suite
+# construction through --args.category_value, so every axis shares the suite's benchmark name.
+
+id: libero_plus
+root: external/LIBERO-plus
+root_env: LIBERO_HOME
+client: evals/libero_plus/harness/eval_libero.py
+conda_env: stablevla
+results_prefix: plus
+default_rung: R1
+trials_per_task: 1
+# The client is a tyro CLI, so its episode list is a field of --args.
+episodes_flag: "--args.episodes"
+
+pythonpath:
+  - evals/libero_plus/harness
+  - "{stablevla}"
+  - "{root}"
+  - "{src}"
+  - evals/libero_plus
+
+env:
+  LIBERO_HOME: "{root}"
+  LIBERO_CONFIG_PATH: "{root}/libero"
+  LIBERO_PLUS_TASK_CLASSIFICATION: "{root}/libero/libero/benchmark/task_classification.json"
+
+client_args:
+  - "--args.pretrained-path"
+  - "{checkpoint}"
+  - "--args.host"
+  - "{host}"
+  - "--args.port"
+  - "{port}"
+  - "--args.task-suite-name"
+  - "{task_suite}"
+  - "--args.category_value"
+  - "{category_value}"
+  - "--args.num-trials-per-task"
+  - "{trials}"
+  - "--args.shard_index"
+  - "{shard}"
+  - "--args.num_shards"
+  - "{num_shards}"
+  - "--args.video-out-path"
+  - "{result_dir}"
+  - "--args.protocol"
+  - "{protocol}"
+
+task_suites:
+  object: libero_object
+  spatial: libero_spatial
+  goal: libero_goal
+  long: libero_10
+
+axes:
+  - {name: Background_Textures,  label: Background}
+  - {name: Camera_Viewpoints,    label: Camera}
+  - {name: Language_Instructions, label: Language}
+  - {name: Light_Conditions,     label: Light}
+  - {name: Objects_Layout,       label: Obj-Layout}
+  - {name: Robot_Initial_States, label: Robot-Init}
+  - {name: Sensor_Noise,         label: Sensor}
+
+marker: libero/libero/benchmark/__init__.py
+
+setup: evals/libero_plus/setup.sh

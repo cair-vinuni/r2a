@@ -1,0 +1,17 @@
+id: gr00t_aloha
+conda_env: gr00t
+python: external/Isaac-GR00T/.venv/bin/python
+protocol: gr00t_aloha
+ckpt_key: gr00t_aloha_ckpt
+server:
+  script: evals/gr00t/ws_server_aloha.py
+  args: ["--model-path", "{checkpoint}", "--port", "{port}", "--max-batch", "16"]
+# Same shape as the LIBERO descriptor: two servers per GPU overlap their CPU-side preprocessing,
+# four clients each keep them fed. One real robot wants --max-batch 1 instead; that is the deploy
+# path, not this one, which only ever serves the offline cache.
+placement:
+  servers_per_gpu: 2
+  clients_per_server: 4
+pythonpath:
+  - evals/gr00t
+  - evals/libero_plus/harness

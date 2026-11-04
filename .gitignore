@@ -1,0 +1,61 @@
+# data, artifacts and results are large and generated; never committed
+/data
+/results
+/outputs
+/outputs_*
+/results_*/
+/external/VLA-JEPA
+/external/VLANeXt
+/external/Isaac-GR00T
+# The LIBERO forks. Each ships a top-level `libero` package and is provisioned by a script
+# (docs/SETUP.md §1); never commit them.
+/external/LIBERO-plus
+/external/LIBERO
+# external/ is provisioned entirely by script, and is a symlink on a worktree checkout
+/external
+
+# large / generated artifacts
+*.npz
+*.npy
+*.pt
+*.pth
+*.mp4
+*.hdf5
+/data/**
+/results/**
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+/build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# runtime eval logs (per-run client/server logs) — never version
+/logs
+/logs_*
+# a nohup'd eval chain drops its console log beside the checkout; same rule, never version
+/*.log
+
+# envs / editors
+.venv/
+.env
+.vscode/
+.idea/
+/stablevla
+/gr00t
+/pi05
+
+# local toolchain: conda env + caches, all inside the repo (never committed)
+/.local
+
+# Hypothesis writes a unicode table cache under here on first run
+/.hypothesis
+
+# seed-search locks are per machine
+evals/robotwin/seeds/**/*.lock
+evals/robotwin_plus/seeds/**/*.lock
+evals/robotwin/seeds/**/*.tmp

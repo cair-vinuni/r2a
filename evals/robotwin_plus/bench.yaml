@@ -1,0 +1,87 @@
+# evals/robotwin_plus/bench.yaml — RoboTwin 2.0-Plus (Robot-Robustness/RoboTwin2.0-Plus), as
+# robot_ood.eval.bench reads it.
+#
+# The robustness benchmark layered on RoboTwin 2.0: the same fifty bimanual tasks and the same
+# Aloha-AgileX embodiment, each axis a task_config that perturbs one dimension of the scene, the
+# robot, the camera, the language or the sensor. The taxonomy is LIBERO-Plus', so the axes carry
+# the LIBERO-Plus names. Its checkout shares external/RoboTwin's fifteen gigabytes of assets and
+# its conda environment; evals/robotwin_plus/setup.sh links them.
+#
+# One trial per task -- fifty episodes an axis -- where the 2.0 bench runs 20 per task.
+
+id: robotwin_plus
+root: external/RoboTwin2.0-Plus
+root_env: ROBOTWIN_HOME
+client: evals/robotwin/harness/eval_robotwin.py
+conda_env: robotwin
+results_prefix: robotwin_plus
+trials_per_task: 1
+renderer: vulkan
+
+pythonpath:
+  - evals/robotwin/harness
+  - evals/libero_plus/harness
+  - "{root}"
+  - "{src}"
+
+env:
+  ROBOTWIN_HOME: "{root}"
+  ROBOTWIN_SEEDS: "{repo}/evals/robotwin_plus/seeds"
+
+# instruction-type auto: the phrasing pool is the one the axis' own task config names, the way
+# RoboTwin 2.0-Plus' script/eval_policy.py derives it from language.mode -- the seen pool on every
+# axis but Language, and the R1+R2+R3 pool there.
+client_args:
+  - "--policy-path"
+  - "{checkpoint}"
+  - "--host"
+  - "{host}"
+  - "--port"
+  - "{port}"
+  - "--task-suite"
+  - "{task_suite}"
+  - "--task-config"
+  - "{category_value}"
+  - "--trials-per-task"
+  - "{trials}"
+  - "--shard"
+  - "{shard}"
+  - "--num-shards"
+  - "{num_shards}"
+  - "--video-out"
+  - "{result_dir}"
+  - "--protocol"
+  - "{protocol}"
+  - "--instruction-type"
+  - "auto"
+
+marker: envs/_base_task.py
+task_list: evals/robotwin/suites/{task_suite}.txt
+
+# The fifty tasks of RoboTwin 2.0, in the same five groups and the same order; `all` is the whole
+# benchmark, which is what one row of the published table is.
+task_suites:
+  plus50: all
+  plus_smoke: smoke
+  g1: g1
+  g2: g2
+  g3: g3
+  g4: g4
+  g5: g5
+  g1_vlact: g1
+  g2_vlact: g2
+  g3_vlact: g3
+  g4_vlact: g4
+  g5_vlact: g5
+
+axes:
+  - {name: Original,   category_value: demo_clean,           label: Clean}
+  - {name: Camera,     category_value: demo_camera,          label: C1+C3}
+  - {name: Robot,      category_value: demo_robot_state,     label: Init}
+  - {name: Language,   category_value: demo_language_plus,   label: R1-R3}
+  - {name: Light,      category_value: demo_light,           label: L1-L4}
+  - {name: Background, category_value: demo_background_plus, label: B1+B2}
+  - {name: Noise,      category_value: demo_vision_noise,    label: N1-N5}
+  - {name: Layout,     category_value: demo_objects_plus,    label: O1+O2}
+
+setup: evals/robotwin_plus/setup.sh

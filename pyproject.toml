@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robot_ood"
+version = "0.1.0"
+description = "Retrieve to Act: motion primitive graph retrieval for robust VLA execution"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["vla", "test-time correction", "retrieval", "robot learning", "libero", "robotwin"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# The core package is deliberately light: numpy + torch + a little I/O. The policy and benchmark
+# stacks (StableVLA, GR00T, openpi, RoboTwin) live in their own environments and are reached through
+# `external/` by the eval harnesses; they are not dependencies of `robot_ood`.
+# matplotlib and imageio are NOT here on purpose: nothing under src/robot_ood imports either. They belong
+# to the eval harness, which runs in the stablevla env (envs/stablevla.yml pins them).
+dependencies = [
+    "numpy>=1.23",
+    "torch>=2.0",
+    "scipy>=1.9",
+    # robot_ood.models.language.encoder loads a frozen text encoder through this, and retrieval reaches it at DEPLOY
+    # (GraphRetriever.language_embedding), not only at build time.
+    "transformers>=4.40",
+    "pyyaml>=6.0",
+    "h5py>=3.7",
+]
+
+[project.optional-dependencies]
+dev = ["black>=24.2.0", "ruff>=0.2.2", "pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 121
+target-version = ["py310", "py311"]
+
+[tool.ruff]
+line-length = 121
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["A", "B", "E", "F", "I", "RUF", "W"]
+ignore = ["F722"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "F401"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

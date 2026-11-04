@@ -1,0 +1,16 @@
+id: pi05_robotwin_sft
+conda_env: stablevla
+python: external/openpi/.venv/bin/python
+protocol: pi05_robotwin
+ckpt_key: pi05_robotwin_sft_ckpt
+server:
+  script: evals/pi05/ws_server.py
+  args: ["--checkpoint", "{checkpoint}", "--config", "robotwin_aloha", "--port", "{port}", "--max-batch", "8"]
+# One server per GPU; the clients plan joint targets on the CPU (TOPP) and keep one curobo planner
+# for the expert check, so seven of them fit beside the server on an 80 GB card.
+placement:
+  servers_per_gpu: 1
+  clients_per_server: 7
+pythonpath:
+  - evals/pi05
+  - evals/libero_plus/harness

@@ -1,0 +1,60 @@
+# evals/libero/bench.yaml — upstream LIBERO (Lifelong-Robot-Learning/LIBERO), as robot_ood.eval.bench reads it.
+#
+# The original benchmark: four suites, ten tasks each, fifty fixed initial states per task, no
+# perturbation axis. evals/libero/setup.sh clones the pinned commit into external/LIBERO and writes
+# the config file the package otherwise asks for interactively. The client drives the upstream
+# `libero` API.
+
+id: libero
+root: external/LIBERO
+root_env: LIBERO_UPSTREAM_HOME
+client: evals/libero/harness/eval_libero.py
+conda_env: stablevla
+results_prefix: libero
+trials_per_task: 50
+
+pythonpath:
+  - evals/libero/harness
+  - evals/libero_plus/harness
+  - "{stablevla}"
+  - "{root}"
+  - "{src}"
+
+env:
+  LIBERO_UPSTREAM_HOME: "{root}"
+  LIBERO_CONFIG_PATH: "{root}/libero"
+
+client_args:
+  - "--policy-path"
+  - "{checkpoint}"
+  - "--host"
+  - "{host}"
+  - "--port"
+  - "{port}"
+  - "--task-suite"
+  - "{task_suite}"
+  - "--trials-per-task"
+  - "{trials}"
+  - "--shard"
+  - "{shard}"
+  - "--num-shards"
+  - "{num_shards}"
+  - "--video-out"
+  - "{result_dir}"
+  - "--protocol"
+  - "{protocol}"
+
+marker: libero/libero/benchmark/__init__.py
+task_glob: libero/libero/bddl_files/{task_suite}/*.bddl
+
+task_suites:
+  object: libero_object
+  spatial: libero_spatial
+  goal: libero_goal
+  long: libero_10
+
+# One axis: the suite as published. The suffix is empty, so `long` runs libero_10 itself.
+axes:
+  - {name: Original, suffix: "", label: Original}
+
+setup: evals/libero/setup.sh

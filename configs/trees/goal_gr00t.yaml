@@ -1,0 +1,9 @@
+policy: gr00t
+task_suite: libero_goal
+data:
+  hdf5: libero_hdf5/libero_goal
+  fwm: fwm/goal_gr00t
+artifacts: goal_gr00t/artifacts
+eval:
+  gr00t_ckpt: gr00t/hf_weights/libero_goal
+  light_filter: evals/libero_plus/suite_filters/libero_goal_Light_Conditions.txt

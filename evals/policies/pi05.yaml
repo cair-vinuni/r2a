@@ -1,0 +1,15 @@
+id: pi05
+conda_env: stablevla
+python: external/openpi/.venv/bin/python
+protocol: openpi
+ckpt_key: pi05_ckpt
+server:
+  script: evals/pi05/ws_server.py
+  args: ["--checkpoint", "{checkpoint}", "--port", "{port}", "--max-batch", "8"]
+# One server per GPU, so its batches stay large; eight clients keep it fed.
+placement:
+  servers_per_gpu: 1
+  clients_per_server: 8
+pythonpath:
+  - evals/pi05
+  - evals/libero_plus/harness

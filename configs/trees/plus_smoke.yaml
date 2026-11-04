@@ -1,0 +1,13 @@
+# Three tasks, to check a RoboTwin 2.0-Plus axis end to end before the fifty-task cell runs.
+policy: pi05_robotwin
+task_suite: plus_smoke
+tasks: evals/robotwin/suites/smoke.txt
+ee_from_obs: true
+pose_space: euclidean
+artifacts: plus_smoke/artifacts
+eval:
+  pi05_robotwin_ckpt: pi05/robotwin/RoboTwin-lerobot_v30-aloha_agilex-joint-0/29999
+  # pi0.5 finetuned on RoboTwin 2.0's 2,500 clean and 25,000 randomized episodes, one model over
+  # the fifty tasks (huggingface.co/motus-robotics/pi0.5_robotwin2, step 40k): the recipe the
+  # RoboTwin 2.0-Plus paper reports its pi0.5 row from, in PyTorch rather than its JAX.
+  pi05_robotwin_cr_ckpt: pi05/robotwin/motus_pi05_robotwin2

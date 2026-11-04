@@ -1,0 +1,40 @@
+# configs/robot_ood.yaml — the one file a user edits.
+#
+# Every path, and every training default, lives here. Environment variables still OVERRIDE what
+# this file says (precedence: CLI flag > env var > this file > code default), but they are for
+# one-off experiments; configuring an installation means editing this file, nothing else.
+# ROBOT_OOD_CONFIG points at an alternative copy of this file, for running several configurations
+# side by side.
+#
+# Relative paths resolve against the repo root; absolute paths are taken as-is.
+
+# ---- filesystem roots (env overrides in parentheses) -------------------------------------------
+roots:
+  data: data                                # ($ROBOT_OOD_DATA)     hdf5 demos, fwm fields
+  outputs: outputs                          # ($ROBOT_OOD_OUTPUTS)  graphs, checkpoints, run logs
+  results: results                          # ($ROBOT_OOD_RESULTS)  eval mp4 / qlog rollouts, figures
+
+# ---- training defaults --------------------------------------------------------------------------
+# Training defaults; a suite's suites.<name>.train block overrides a value. locator: stage_a
+# epochs with teacher memory, then the self/wrong curriculum until epochs.
+defaults:
+  build:
+    # cache-policy: the GPUs its policy servers take; 0 servers/clients means the policy's
+    # placement (evals/policies/<id>.yaml) times those GPUs
+    cache_policy: {gpus: "0,1,2,3", servers: 0, clients: 0}
+  train:
+    locator: {epochs: 30, stage_a: 10}
+    entry:   {epochs: 6000}
+    fcsr:    {epochs: 30}
+
+# ---- per-suite maps -----------------------------------------------------------------------------
+# One suite = one file under configs/trees/<name>.yaml; the file stem is the suite name. Each holds:
+#   policy         — which evals/policies/<id>.yaml built and runs this tree (default stablevla)
+#   task_suite     — LIBERO benchmark name the eval client expects
+#   data.hdf5      — demo hdf5 directory, under roots.data
+#   data.fwm       — trained-ONF-field / QNDF dir, under roots.data (read as QNDF_DIR)
+#   artifacts      — the graph/checkpoint directory, under roots.outputs ($GR_GRAPH_DIR)
+#   eval.*         — per-policy checkpoints and the Light_Conditions instance filter
+#   train          — optional per-suite override of defaults.train, same shape
+# A new tree (or a reseed: long_seed2.yaml pointing at long_seed2/artifacts) is one new file here.
+

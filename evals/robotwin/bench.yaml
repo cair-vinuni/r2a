@@ -1,0 +1,74 @@
+# evals/robotwin/bench.yaml — RoboTwin 2.0 (RoboTwin-Platform/RoboTwin), as robot_ood.eval.bench reads it.
+#
+# Fifty bimanual tasks of the 2.0 release in five groups of ten (suites/g*.txt). The axes are
+# the benchmark's two evaluation settings, each a task_config the client loads: demo_clean (the
+# leaderboard's Easy) and demo_randomized (Hard: random backgrounds, clutter, lighting, table height).
+# evals/robotwin/setup.sh clones the pinned commit into external/RoboTwin, builds its conda env and
+# downloads its assets. Episodes are the first trials_per_task seeds from 2000 * (1 + seed) whose
+# expert demonstration succeeds, the way RoboTwin's evaluation counts them; the client caches those seed
+# lists under seeds/<task_config>/ so a rerun never repeats the search.
+
+id: robotwin
+root: external/RoboTwin
+root_env: ROBOTWIN_HOME
+client: evals/robotwin/harness/eval_robotwin.py
+conda_env: robotwin
+results_prefix: robotwin
+trials_per_task: 20
+renderer: vulkan
+
+pythonpath:
+  - evals/robotwin/harness
+  - evals/libero_plus/harness
+  - "{root}"
+  - "{src}"
+
+env:
+  ROBOTWIN_HOME: "{root}"
+
+client_args:
+  - "--policy-path"
+  - "{checkpoint}"
+  - "--host"
+  - "{host}"
+  - "--port"
+  - "{port}"
+  - "--task-suite"
+  - "{task_suite}"
+  - "--task-config"
+  - "{category_value}"
+  - "--trials-per-task"
+  - "{trials}"
+  - "--shard"
+  - "{shard}"
+  - "--num-shards"
+  - "{num_shards}"
+  - "--video-out"
+  - "{result_dir}"
+  - "--protocol"
+  - "{protocol}"
+  - "--instruction-type"
+  - "unseen"
+
+marker: envs/_base_task.py
+task_list: evals/robotwin/suites/{task_suite}.txt
+
+# Five groups of ten tasks, alphabetical: a cell is one group, like a LIBERO suite, and the fcsr
+# trees are built per group. suites/all.txt is the full list in the same order.
+task_suites:
+  g1: g1
+  g2: g2
+  g3: g3
+  g4: g4
+  g5: g5
+  g1_vlact: g1
+  g2_vlact: g2
+  g3_vlact: g3
+  g4_vlact: g4
+  g5_vlact: g5
+
+axes:
+  - {name: Randomized, category_value: demo_randomized, label: Hard}
+  - {name: Clean,      category_value: demo_clean,      label: Easy}
+
+setup: evals/robotwin/setup.sh

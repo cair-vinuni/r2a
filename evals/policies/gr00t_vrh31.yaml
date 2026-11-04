@@ -1,0 +1,14 @@
+id: gr00t_vrh31
+conda_env: gr00t
+python: external/Isaac-GR00T/.venv/bin/python
+protocol: gr00t_vrh31
+ckpt_key: gr00t_vrh31_ckpt
+server:
+  script: evals/gr00t/ws_server_vrh31.py
+  args: ["--model-path", "{checkpoint}", "--port", "{port}", "--max-batch", "16"]
+placement:
+  servers_per_gpu: 2
+  clients_per_server: 4
+pythonpath:
+  - evals/gr00t
+  - evals/libero_plus/harness

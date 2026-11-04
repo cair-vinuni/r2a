@@ -1,0 +1,11 @@
+policy: stablevla
+task_suite: libero_10
+data:
+  hdf5: libero_hdf5/libero_10
+  fwm: fwm/long
+artifacts: long/artifacts
+eval:
+  stablevla_ckpt: stablevla/hf_weights/long
+  gr00t_ckpt: gr00t/hf_weights/libero_10
+  pi05_ckpt: pi05/openpi-assets/checkpoints/pi05_libero
+  light_filter: evals/libero_plus/suite_filters/libero_10_Light_Conditions.txt

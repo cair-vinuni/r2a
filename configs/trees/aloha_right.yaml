@@ -1,0 +1,33 @@
+# The right arm of a real ALOHA as a joint-space proxy corpus (python -m robot_ood.data.lerobot_aloha):
+# six joints stand where a pose would, so dims 3:6 add rather than compose. Two LeRobot datasets,
+# one file each; the multitask checkpoint was finetuned on exactly these two.
+#
+# There is no simulator behind this tree. It builds and trains offline from recorded demonstrations,
+# and deploys through robot_ood.runtime against the real arm.
+policy: gr00t_aloha
+task_suite: aloha_right
+arm: right
+ee_from_obs: true
+pose_space: euclidean
+# 300 demos, median 265 raw frames -- past the 240 the default schedule reaches (3 layers x max
+# dilation 16 x coarsen 5), so build calibrate fails its dilation-reach gate. layers is fixed, and
+# dilations cannot move: data/edges.py resolves relation names through the module-level
+# schema.REL_INDEX, so a sixth entry raises KeyError: 'next32'. coarsen is the knob that is left,
+# and 3 x 16 x 6 = 288 clears the median.
+#
+# Coarser nodes shorten what one segment spans, which costs deploy coverage; segment_len pays it
+# back. Measured over the coarsen-6 node table:
+#
+#   segment_len 16 -> segment_frames 13 -> plan_rows  8   (corrector fixes half of each chunk)
+#   segment_len 20 -> segment_frames 19 -> plan_rows 16
+build:
+  graph:
+    coarsen: 6
+  segments:
+    segment_len: 20
+data:
+  hdf5: aloha/hdf5/aloha_right
+  fwm: fwm/aloha_right
+artifacts: aloha_right/artifacts
+eval:
+  gr00t_aloha_ckpt: gr00t/hf_weights/aloha_right_multitask_local

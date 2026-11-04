@@ -1,0 +1,27 @@
+# Ten RoboTwin 2.0 tasks, both arms in ONE graph: nodes carry arm and pair, and the three
+# bimanual relations connect them (built by python -m robot_ood.cli build --suite g1).
+policy: pi05_robotwin
+task_suite: g1
+tasks: evals/robotwin/suites/g1.txt
+ee_from_obs: true
+pose_space: euclidean
+lanes:
+  left: g1_left
+  right: g1_right
+data:
+  hdf5: robotwin/hdf5/g1_left
+  fwm: fwm/g1
+artifacts: g1/artifacts
+train:
+  # A shortened locator schedule: the bimanual graph is twice the nodes, and the corrector is
+  # wanted this week. The recipe is otherwise the shipped one.
+  locator: {epochs: 12, gnn_epochs: 6}
+eval:
+  pi05_robotwin_ckpt: pi05/robotwin/RoboTwin-lerobot_v30-aloha_agilex-joint-0/29999
+  # pi0.5 finetuned from its base weights on this group's fifty clean demos per task
+  # (evals/pi05/train_robotwin.py), evaluated on Randomized as an out-of-distribution policy.
+  pi05_robotwin_clean_ckpt: pi05/checkpoints/robotwin_g1_clean/run0/29999
+  # The published pi0.5 finetune of RoboTwin 2.0's fifty clean-demo tasks
+  # (huggingface.co/madokalif/pi05-robotwin2-clean50-sft, PyTorch weights).
+  pi05_robotwin_sft_ckpt: pi05/robotwin2_clean50_sft
+  vlact_ckpt: data/vlact/robotwin_finetune/checkpoints/steps_50000_pytorch_model.pt

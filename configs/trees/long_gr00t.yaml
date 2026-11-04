@@ -1,0 +1,9 @@
+policy: gr00t
+task_suite: libero_10
+data:
+  hdf5: libero_hdf5/libero_10
+  fwm: fwm/long_gr00t
+artifacts: long_gr00t/artifacts
+eval:
+  gr00t_ckpt: gr00t/hf_weights/libero_10
+  light_filter: evals/libero_plus/suite_filters/libero_10_Light_Conditions.txt

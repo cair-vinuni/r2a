@@ -1,0 +1,18 @@
+# One arm of the g1 tasks as a joint-space proxy corpus (python -m robot_ood.data.robotwin), built
+# against VLAct: six joints stand where a pose would, so dims 3:6 add rather than compose.
+policy: vlact
+task_suite: g1
+tasks: evals/robotwin/suites/g1.txt
+arm: right
+ee_from_obs: true
+pose_space: euclidean
+data:
+  hdf5: robotwin/hdf5/g1_right
+  fwm: fwm/g1_right
+artifacts: g1_right_vlact/artifacts
+eval:
+  pi05_robotwin_ckpt: pi05/robotwin/RoboTwin-lerobot_v30-aloha_agilex-joint-0/29999
+  # The published pi0.5 finetune of RoboTwin 2.0's fifty clean-demo tasks
+  # (huggingface.co/madokalif/pi05-robotwin2-clean50-sft, PyTorch weights).
+  pi05_robotwin_sft_ckpt: pi05/robotwin2_clean50_sft
+  vlact_ckpt: data/vlact/robotwin_finetune/checkpoints/steps_50000_pytorch_model.pt

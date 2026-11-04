@@ -1,0 +1,15 @@
+# One arm of the g3 tasks as a joint-space proxy corpus (python -m robot_ood.data.robotwin):
+# six joints stand where a pose would, so dims 3:6 add rather than compose.
+policy: pi05_robotwin
+task_suite: g3
+tasks: evals/robotwin/suites/g3.txt
+arm: right
+ee_from_obs: true
+pose_space: euclidean
+data:
+  hdf5: robotwin/hdf5/g3_right
+  fwm: fwm/g3_right
+artifacts: g3_right/artifacts
+eval:
+  pi05_robotwin_ckpt: pi05/robotwin/RoboTwin-lerobot_v30-aloha_agilex-joint-0/29999
+  vlact_ckpt: data/vlact/robotwin_finetune/checkpoints/steps_50000_pytorch_model.pt

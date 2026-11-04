@@ -1,0 +1,12 @@
+# Ten RoboTwin 2.0 tasks, both arms: the bimanual cell. base needs only the checkpoint; fcsr runs
+# one corrector per arm from the two lane trees below.
+policy: pi05_robotwin
+task_suite: g5
+ee_from_obs: true
+pose_space: euclidean
+lanes:
+  left: g5_left
+  right: g5_right
+eval:
+  pi05_robotwin_ckpt: pi05/robotwin/RoboTwin-lerobot_v30-aloha_agilex-joint-0/29999
+  vlact_ckpt: data/vlact/robotwin_finetune/checkpoints/steps_50000_pytorch_model.pt

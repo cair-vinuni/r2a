@@ -1,0 +1,28 @@
+# onf-core: the `robot_ood` package alone. Light: numpy + torch (CPU is enough) +
+# scipy + transformers + a little I/O. This is what `pip install -e .` needs; it does NOT include
+# any policy/benchmark stack.
+#
+#   conda env create -f envs/onf-core.yml
+#   conda activate onf-core
+#   pip install -e .
+name: onf-core
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      # --- ONF core runtime ---
+      - numpy>=1.23
+      - scipy>=1.9
+      # robot_ood.models.language's text encoder, reached at deploy time
+      - transformers>=4.40
+      - pyyaml>=6.0
+      - h5py>=3.7
+      # torch — CPU wheel is sufficient for the field. For a CUDA build swap in the
+      # matching torch/torchvision from the pytorch/nvidia channels instead.
+      - torch>=2.0
+      # --- dev tooling (optional; matches pyproject [dev]) ---
+      - ruff>=0.2.2
+      - black>=24.2.0
+      - pytest>=7.0

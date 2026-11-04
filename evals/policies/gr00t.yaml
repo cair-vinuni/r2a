@@ -1,0 +1,15 @@
+id: gr00t
+conda_env: gr00t
+python: external/Isaac-GR00T/.venv/bin/python
+protocol: nvidia
+ckpt_key: gr00t_ckpt
+server:
+  script: evals/gr00t/ws_server.py
+  args: ["--model-path", "{checkpoint}", "--port", "{port}", "--max-batch", "16"]
+# Two 6 GB servers per GPU overlap their CPU-side preprocessing; four clients each keep them fed.
+placement:
+  servers_per_gpu: 2
+  clients_per_server: 4
+pythonpath:
+  - evals/gr00t
+  - evals/libero_plus/harness

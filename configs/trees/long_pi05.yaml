@@ -1,0 +1,9 @@
+policy: pi05
+task_suite: libero_10
+data:
+  hdf5: libero_hdf5/libero_10
+  fwm: fwm/long_pi05
+artifacts: long_pi05/artifacts
+eval:
+  pi05_ckpt: pi05/openpi-assets/checkpoints/pi05_libero
+  light_filter: evals/libero_plus/suite_filters/libero_10_Light_Conditions.txt
